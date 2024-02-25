@@ -1,0 +1,10 @@
+name: SimpleCAN_TUI
+
+dependencies:
+  - pyyaml
+  - pip:
+    - textual
+    - textual-dev # for debugging via textual console
+    - python-can
+    - dacite
+    

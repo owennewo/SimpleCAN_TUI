@@ -1,0 +1,41 @@
+/* Screen {
+    layout: vertical;
+    width: 100%;
+    height: 100%;
+}
+
+Header {
+    dock: top;
+}
+
+
+
+
+
+Horizontal {
+    width: 100%;
+    height: 100%;
+}
+
+*/
+OptionList {
+    width: 20;
+    height: 100%;
+}
+
+DataTable {
+    width: auto;
+    height: 100%;
+}
+
+Vertical {
+    width: 100%;
+    height: 100%;
+}
+
+
+CanFooter {
+    dock: bottom;
+    height: 1;
+    background: blue;
+}

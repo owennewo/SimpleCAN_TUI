@@ -1,0 +1,147 @@
+---
+connection:
+  interface: socketcan
+  channel: can0
+  bitrate: 1000000
+  # interface specific args i.e. for socketcan: 
+  # https://python-can.readthedocs.io/en/stable/interfaces/socketcan.html#can.interfaces.socketcan.SocketcanBus
+  receive_own_messages: True
+  local_loopback: True
+  ignore_rx_error_frames: False
+modules:
+  0b0000:
+    name: MOTOR_CONFIG
+    fields:
+      0b0000:
+        name: DEVICE_ID
+        description: The Device ID of motor or other Can device
+        value: None
+        datatype: byte
+      0b0001:
+        name: MOTION_CONTROL_MODE
+        description: 0=torque, 1=velocity, 2=angle, 3=velocity_openloop, 4=angle_openloop
+        value: None
+        datatype: byte
+      0b0010:
+        name: TORQUE_CONTROL_MODE
+        description: 0=voltage, 1=dc_current, 2=foc_current
+        value: None
+        datatype: byte
+      0b0011:
+        name: FOC_MODULATION
+        description: 0=SinePWM, 1=SpaceVectorPWM, 2=Trapezoidal120, 3=Trapezoidal150)
+        value: None
+        datatype: byte
+      0b0100:
+        name: MOTION_DOWNSAMPLE
+        description: reduce the frequency of motion control)
+        value: None
+        datatype: uint16_t
+  0b0001:
+    name: MOTOR_RUNTIME
+    fields:
+      0b0000:
+        name: DEVICE_ID
+        description: The Device ID of motor or other Can device
+        value: None
+        datatype: byte
+      0b0001:
+        name: ENABLE
+        description: The enable status of motor
+        datatype: byte
+      0b001:
+        name: TARGET
+        description: The target value, purpose depends on the motion control mode
+        value: None
+        datatype: float
+      0b010:
+        name: STATUS
+        description: The status of motor (running, stopped, faulted)
+        value: None
+        datatype: byte
+  0b0010:
+    name: MOTOR_LIMITS
+    fields:
+      0b000:
+        name: MOTOR_LIMIT_CURRENT
+        description: max current of motor
+        value: None
+        datatype: float
+      0b001:
+        name: MOTOR_LIMIT_VOLTAGE
+        description: max voltage of motor
+        value: None
+        datatype: float
+      0b010:
+        name: MOTOR_LIMIT_VOLTAGE_SENSOR_ALIGN
+        description: max voltage of motor during sensor align
+        value: None
+        datatype: float
+      0b011:
+        name: MOTOR_LIMIT_VELOCITY
+        description: max velocity of motor
+        value: None
+        datatype: float
+  0b0011:
+    name: DRIVER_CONFIG
+    fields:
+      0b000:
+        name: VOLTAGE_LIMIT
+        description: max voltage of driver
+        value: None
+        datatype: float
+      0b001:
+        name: VOLTAGE_POWER_SUPPLY
+        description: max voltage of motor power supply
+        value: None
+        datatype: float
+      0b010:
+        name: PWM_FREQUENCY
+        description: pwm frequency
+        value: None
+        datatype: float
+  0b0110:
+    name: PID_CURRENT_Q
+    fields: &PID_FIELDS
+      0b000:
+        name: P
+        description: proportional gain of current q PID
+        value: None
+        datatype: float 
+      0b001:
+        name: I
+        description: integral gain of current q PID
+        value: None
+        datatype: float 
+      0b010:
+        name: D
+        description: derivative gain of current q PID
+        value: None
+        datatype: float 
+      0b011:
+        name: LIMIT
+        description: limit of current q PID
+        value: None
+        datatype: float 
+      0b100:
+        name: RAMP
+        description: ramp of current q PID
+        value: None
+        datatype: float 
+      0b101:
+        name: LPF_TF
+        description: low pass filter time constant of current q PID
+        value: None
+        datatype: float 
+
+  0b0111: 
+    name: PID_CURRENT_D
+    fields: *PID_FIELDS
+  0b1000:
+    name: PID_VELOCITY
+    fields: *PID_FIELDS    
+  0b1001:
+    name: PID_ANGLE
+    fields: *PID_FIELDS
+
+    
