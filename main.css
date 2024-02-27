@@ -1,41 +1,79 @@
-/* Screen {
-    layout: vertical;
-    width: 100%;
-    height: 100%;
-}
-
-Header {
-    dock: top;
-}
-
-
-
-
-
 Horizontal {
     width: 100%;
     height: 100%;
 }
 
-*/
-OptionList {
-    width: 20;
+#vertical-left {
+    width: 25;
+}
+
+
+#device-container {
+    background: palegoldenrod;
+}
+
+#module-table {
+    width: 25;
+}
+
+
+#module-container {
+    width: 25;
+    background: lightskyblue;
+}
+
+#module-table {
+    width: 25;
     height: 100%;
 }
 
-DataTable {
-    width: auto;
-    height: 100%;
+#field-container {
+    background: whitesmoke;
 }
 
-Vertical {
-    width: 100%;
+
+#field-table {
     height: 100%;
 }
-
 
 CanFooter {
     dock: bottom;
     height: 1;
-    background: blue;
+    background: ansi_blue;
+}
+
+Header {
+    background: mediumslateblue;
+}
+
+CanFieldEditWidget {
+    align: center middle;
+}
+
+CanFieldEditWidget>Container {
+    width: auto;
+    height: auto;
+    border: thick $background 80%;
+    background: $surface;
+}
+
+CanFieldEditWidget>Container>Horizontal>Input {
+    width: auto;
+    height: auto;
+    margin-top: 1;
+}
+
+CanFieldEditWidget>Container>Horizontal>Label {
+    margin-left: 2;
+    margin-top: 1;
+}
+
+CanFieldEditWidget>Container>Horizontal>Button {
+    margin: 1;
+
+}
+
+CanFieldEditWidget>Container>Horizontal {
+    width: auto;
+    height: auto;
 }

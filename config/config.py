@@ -16,19 +16,24 @@ class CanField:
 
 
 @dataclass
+class CanDevice:
+    name: str
+
+
+@dataclass
 class CanModule:
     name: str
-    # description: str
     fields: Dict[int, CanField]
 
 
 @dataclass
 class Config:
     connection: Dict
+    devices: Dict[int, CanDevice]
     modules: Dict[int, CanModule]
 
 
-def load_config_from_yaml(path="config.yaml") -> Config:
+def load_config_from_yaml(path="config/config.yaml") -> Config:
     with open(path, "r") as file:
         yaml_data = yaml.safe_load(file)
     config = from_dict(data_class=Config, data=yaml_data)

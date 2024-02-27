@@ -2,6 +2,9 @@ from textual.app import ComposeResult
 from textual.widgets import Label, Input
 from textual.widget import Widget
 from textual.containers import Horizontal
+from textual import on
+from simplecan.controller import SimpleCanController
+from simplecan.event import SimpleCanEvent
 
 # from textual.reactive import Reactive
 from textual.reactive import reactive
@@ -16,10 +19,12 @@ class CanFooter(Widget):
     def render(self) -> str:
         return f"rx: {self.rx_count} tx: {self.tx_count} err: {self.error_count}"
 
-    def on_can_message(self, msg):
-        if msg.is_error_frame:
+    @on(SimpleCanEvent)
+    def on_simplecan_event(self, event: SimpleCanEvent):
+        if event.msg.is_error_frame:
             self.error_count += 1
-        elif msg.is_rx:
+        elif event.msg.is_rx:
             self.rx_count += 1
         else:
             self.tx_count += 1
+        event.stop()

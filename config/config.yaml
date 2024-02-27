@@ -8,6 +8,12 @@ connection:
   receive_own_messages: True
   local_loopback: True
   ignore_rx_error_frames: False
+devices:
+  0b000:
+    name: CYBERGEAR_LEFT
+  0b001:
+    name: CYBERGEAR_RIGHT
+
 modules:
   0b0000:
     name: MOTOR_CONFIG
