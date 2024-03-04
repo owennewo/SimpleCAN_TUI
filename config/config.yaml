@@ -13,100 +13,125 @@ devices:
     name: CYBERGEAR_LEFT
   0b001:
     name: CYBERGEAR_RIGHT
-
 modules:
   0b0000:
-    name: MOTOR_CONFIG
+    name: CONTROL
     fields:
-      0b0000:
-        name: DEVICE_ID
-        description: The Device ID of motor or other Can device
-        value: None
-        datatype: byte
-      0b0001:
-        name: MOTION_CONTROL_MODE
-        description: 0=torque, 1=velocity, 2=angle, 3=velocity_openloop, 4=angle_openloop
-        value: None
-        datatype: byte
-      0b0010:
-        name: TORQUE_CONTROL_MODE
-        description: 0=voltage, 1=dc_current, 2=foc_current
-        value: None
-        datatype: byte
-      0b0011:
-        name: FOC_MODULATION
-        description: 0=SinePWM, 1=SpaceVectorPWM, 2=Trapezoidal120, 3=Trapezoidal150)
-        value: None
-        datatype: byte
-      0b0100:
-        name: MOTION_DOWNSAMPLE
-        description: reduce the frequency of motion control)
-        value: None
-        datatype: uint16_t
-  0b0001:
-    name: MOTOR_RUNTIME
-    fields:
-      0b0000:
-        name: DEVICE_ID
-        description: The Device ID of motor or other Can device
-        value: None
-        datatype: byte
-      0b0001:
+      0b000:
         name: ENABLE
         description: The enable status of motor
-        datatype: byte
+        datatype: bool
       0b001:
         name: TARGET
         description: The target value, purpose depends on the motion control mode
         value: None
         datatype: float
       0b010:
-        name: STATUS
-        description: The status of motor (running, stopped, faulted)
+        name: MOTION_MODE
+        description: 0=torque, 1=velocity, 2=angle, 3=velocity_openloop, 4=angle_openloop
         value: None
-        datatype: byte
-  0b0010:
-    name: MOTOR_LIMITS
+        datatype: uint8_t
+      0b011:
+        name: TORQUE_MODE
+        description: 0=voltage, 1=dc_current, 2=foc_current
+        value: None
+        datatype: uint8_t
+      0b100:
+        name: INIT_FOC
+        description: run the init foc which will find the zero electric angle and sensor direction
+        value: None
+        datatype: bool
+  0b0001:
+    name: LIMITS
     fields:
       0b000:
-        name: MOTOR_LIMIT_CURRENT
-        description: max current of motor
-        value: None
-        datatype: float
-      0b001:
-        name: MOTOR_LIMIT_VOLTAGE
+        name: VOLTAGE_MOTOR
         description: max voltage of motor
         value: None
         datatype: float
+      0b001:
+        name: VOLTAGE_DRIVER
+        description: max voltage of driver
+        value: None
+        datatype: float
       0b010:
-        name: MOTOR_LIMIT_VOLTAGE_SENSOR_ALIGN
+        name: VOLTAGE_SENSOR_ALIGN
         description: max voltage of motor during sensor align
         value: None
         datatype: float
       0b011:
-        name: MOTOR_LIMIT_VELOCITY
+        name: CURRENT
+        description: max current of motor
+        value: None
+        datatype: float      
+      0b100:
+        name: VELOCITY
         description: max velocity of motor
         value: None
         datatype: float
-  0b0011:
-    name: DRIVER_CONFIG
+  0b0010:
+    name: MOTOR
     fields:
       0b000:
-        name: VOLTAGE_LIMIT
-        description: max voltage of driver
+        name: STATUS
+        description: The status of motor (running, stopped, faulted)
+        value: None
+        datatype: uint8_t
+      0b001:
+        name: ZERO_ELECTRIC_ANGLE
+        description: The zero electric angle aligning sensor to motor
         value: None
         datatype: float
-      0b001:
+      0b010:
+        name: SENSOR_DIRECTION
+        description: Sensor direction (1=CW, -1=CCW, 0=Unknown)
+        value: None
+        datatype: int16_t
+      0b011:
+        name: POLE_PAIRS
+        description: Pole Pairs of motors (no. magnets % 2)
+        value: None
+        datatype: uint8_t
+      0b100:
+        name: PHASE_RESISTANCE
+        description: Phase resistance of Motor
+        value: None
+        datatype: float
+      0b101:
+        name: PHASE_INDUCTANCE
+        description: Phase inductance of Motor
+        value: None
+        datatype: float
+      0b110:
+        name: KV_RATING
+        description: KV Rating (volts per rpm) of motor
+        value: None
+        datatype: float
+  0b0011:
+    name: DRIVER
+    fields:
+      0b000:
         name: VOLTAGE_POWER_SUPPLY
         description: max voltage of motor power supply
         value: None
         datatype: float
-      0b010:
+      0b001:
         name: PWM_FREQUENCY
         description: pwm frequency
         value: None
-        datatype: float
-  0b0110:
+        datatype: uint16_t
+      0b010:
+        name: FOC_MODULATION
+        description: 0=SinePWM, 1=SpaceVectorPWM, 2=Trapezoidal120, 3=Trapezoidal150)
+        value: None
+        datatype: uint8_t
+      0b011:
+        name: MOTION_DOWNSAMPLE
+        description: reduce the frequency of motion control)
+        value: None
+        datatype: uint16_t
+      
+  0b0100:
     name: PID_CURRENT_Q
     fields: &PID_FIELDS
       0b000:
@@ -140,14 +165,81 @@ modules:
         value: None
         datatype: float 
 
-  0b0111: 
+  0b0101: 
     name: PID_CURRENT_D
     fields: *PID_FIELDS
-  0b1000:
+  0b0110:
     name: PID_VELOCITY
     fields: *PID_FIELDS    
-  0b1001:
+  0b0111:
     name: PID_ANGLE
     fields: *PID_FIELDS
-
-    
+  0b1000: 
+    name: TELEMETRY
+    fields:
+  0b1001:
+    name: PROGRAM
+    fields:
+      0b000:
+          name: DEVICE_ID
+          description: The Device ID of motor or other Can device
+          value: None
+          datatype: uint8_t
+      0b001:
+          name: DEVICE_NAME
+          description: An 8 char name for device e.g. 'LEFT_ARM'
+          value: None
+          datatype: string
+      0b010:
+          name: UNIQUE_ID
+          description: The Device ID of motor or other Can device
+          value: None
+          datatype: ulong64_t
+      0b011:
+          name: WRITE_ECHO
+          description: Writing also causes RTR send
+          value: None
+          datatype: bool
+  0b1000:
+    name: TELEMETRY
+    fields:
+      0b000:
+          name: CHANNEL_0
+          description: Telemetry channel 0
+          value: None
+          datatype: float
+      0b001:
+          name: CHANNEL_1
+          description: Telemetry channel 1
+          value: None
+          datatype: float
+      0b010:
+          name: CHANNEL_2
+          description: Telemetry channel 2
+          value: None
+          datatype: float
+      0b011:
+          name: CHANNEL_3
+          description: Telemetry channel 3
+          value: None
+          datatype: float
+      0b100:
+          name: CONFIG_0
+          description: Telemetry channel 0 configuration
+          value: None
+          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 
+      0b101:
+          name: CONFIG_1
+          description: Telemetry channel 1 configuration
+          value: None
+          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 
+      0b110:
+          name: CONFIG_2
+          description: Telemetry channel 2 configuration
+          value: None
+          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 
+      0b111:
+          name: CONFIG_3
+          description: Telemetry channel 3 configuration
+          value: None
+          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 

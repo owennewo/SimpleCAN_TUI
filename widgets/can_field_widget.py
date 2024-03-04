@@ -3,31 +3,59 @@ from textual.widget import Widget
 from textual.widgets import DataTable
 from simplecan.event import SimpleCanEvent
 from textual import on
+import asyncio
+from textual.events import Key
 
 
 class CanFieldWidget(Widget):
 
-    field_table = DataTable(id="field-table")
-    field_table.cursor_type = "row"
+    table = DataTable(id="field-table")
+    table.cursor_type = "row"
+    update_lock = asyncio.Lock()
 
     def on_mount(self) -> None:
-        self.field_table.add_column("field", key="field")
-        self.field_table.add_column("value", key="value")
-        self.field_table.add_column("datatype", key="datatype")
-        self.field_table.add_column("description", key="description")
+        self.table.add_column("field", key="field")
+        self.table.add_column("value", key="value")
+        self.table.add_column("datatype", key="datatype")
+        self.table.add_column("description", key="description")
 
     def compose(self) -> ComposeResult:
-        yield self.field_table
+        yield self.table
 
     @on(SimpleCanEvent)
-    def on_simplecan_event(self, event: SimpleCanEvent):
-        self.field_table.update_cell(
-            row_key=str(event.field_id), column_key="value", value=event.value
-        )
-        event.stop()
+    async def on_simplecan_event(self, event: SimpleCanEvent):
+        if event.module_id != self.app.module_id:
+            return
+        async with self.update_lock:
+            self.table.update_cell(
+                row_key=str(event.field_id),
+                column_key="value",
+                value=event.value,
+                update_width=True,
+            )
+
+            coordinate = self.table.get_cell_coordinate(
+                row_key=str(event.field_id), column_key="value"
+            )
+            self.table.move_cursor(
+                row=coordinate.row, column=coordinate.column, animate=False
+            )
+            self.table.refresh_row(coordinate.row)
+            await asyncio.sleep(
+                0.04
+            )  # this sleep is just to slow things down to see the cursor move
+            event.stop()
+
+    @on(Key)
+    def on_key(self, event: Key) -> None:
+        if event.key == "escape":
+            self.app.can_module_widget.table.focus()
+        # elif event.key == "enter":
+        #     self.app.can_field_widget.focus()
+        # event.stop()
 
     def update_fields(self, can_module):
-        self.field_table.clear()
+        self.table.clear()
         for key, field in can_module.fields.items():
             row = (field.name, field.value, field.datatype, field.description)
-            self.field_table.add_row(*row, key=str(key), label=f"{key:#03x}")
+            self.table.add_row(*row, key=str(key), label=f"{key:#03x}")

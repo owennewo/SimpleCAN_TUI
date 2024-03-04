@@ -3,6 +3,8 @@ from textual.widget import Widget
 from textual.widgets import DataTable
 from typing import Dict
 from config.config import CanDevice
+from textual.events import Key
+from textual import on
 
 
 class CanDeviceWidget(Widget):
@@ -23,3 +25,11 @@ class CanDeviceWidget(Widget):
 
     def compose(self) -> ComposeResult:
         yield self.table
+
+    @on(Key)
+    def on_key(self, event: Key) -> None:
+        if event.key == "escape":
+            self.app.exit()
+        elif event.key == "enter":
+            self.app.can_module_widget.table.focus()
+        # event.stop()

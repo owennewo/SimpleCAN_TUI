@@ -7,9 +7,12 @@ Horizontal {
     width: 25;
 }
 
+DataTable:focus-within {
+    background: blue;
+}
 
 #device-container {
-    background: palegoldenrod;
+    /* background: palegoldenrod; */
 }
 
 #module-table {
@@ -19,7 +22,7 @@ Horizontal {
 
 #module-container {
     width: 25;
-    background: lightskyblue;
+    /* background: lightskyblue; */
 }
 
 #module-table {
@@ -28,7 +31,7 @@ Horizontal {
 }
 
 #field-container {
-    background: whitesmoke;
+    /* background: whitesmoke; */
 }
 
 
@@ -60,6 +63,18 @@ CanFieldEditWidget>Container {
 CanFieldEditWidget>Container>Horizontal>Input {
     width: auto;
     height: auto;
+    margin-top: 1;
+    border: none;
+    margin-left: 1;
+}
+
+#input-value {
+    background: pink;
+}
+
+#input-jog {
+    background: grey;
+    margin-right: 1;
     margin-top: 1;
 }
 

@@ -67,7 +67,7 @@ class VerticalLayoutExample(App):
 
     @on(DataTable.RowSelected, "#device-table")
     def device_selected(self, event):
-        self.device_id = event.row_key.value
+        self.device_id = int(event.row_key.value)
 
     @on(DataTable.RowSelected, "#module-table")
     def module_selected(self, event):
