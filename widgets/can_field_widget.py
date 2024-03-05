@@ -5,6 +5,7 @@ from simplecan.event import SimpleCanEvent
 from textual import on
 import asyncio
 from textual.events import Key
+from widgets.can_field_edit_widget import CanFieldEditWidget
 
 
 class CanFieldWidget(Widget):
@@ -50,9 +51,15 @@ class CanFieldWidget(Widget):
     def on_key(self, event: Key) -> None:
         if event.key == "escape":
             self.app.can_module_widget.table.focus()
-        # elif event.key == "enter":
-        #     self.app.can_field_widget.focus()
-        # event.stop()
+        elif event.key == "enter":
+            self.app.push_screen(
+                CanFieldEditWidget(
+                    self.app.config,
+                    self.app.device_id,
+                    self.app.module_id,
+                    self.app.field_id,
+                )
+            )
 
     def update_fields(self, can_module):
         self.table.clear()

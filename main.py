@@ -7,7 +7,7 @@ from widgets.can_footer import CanFooter
 from widgets.can_device_widget import CanDeviceWidget
 from widgets.can_module_widget import CanModuleWidget
 from widgets.can_field_widget import CanFieldWidget
-from widgets.can_field_edit_widget import CanFieldEditWidget
+
 from simplecan.controller import SimpleCanController
 from simplecan.event import SimpleCanEvent
 from config.config import (
@@ -26,8 +26,8 @@ class VerticalLayoutExample(App):
     def __init__(self):
         super().__init__()
         self.device_id = 0
-        self.can_footer = CanFooter()
         config = load_config_from_yaml()
+        self.can_footer = CanFooter(config)
         self.config = config
         self.modules = config.modules
         self.can_module_widget = CanModuleWidget(self.modules)
@@ -78,11 +78,6 @@ class VerticalLayoutExample(App):
     @on(DataTable.RowSelected, "#field-table")
     def field_selected(self, event):
         self.field_id = int(event.row_key.value)
-        self.push_screen(
-            CanFieldEditWidget(
-                self.config, self.device_id, self.module_id, self.field_id
-            )
-        )
 
     @on(SimpleCanEvent)
     def can_receive(self, event: SimpleCanEvent):
