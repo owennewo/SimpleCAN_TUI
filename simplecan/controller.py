@@ -97,26 +97,48 @@ class SimpleCanController:
         field_id = msg.arbitration_id & 0b111
 
         if msg.dlc > 0 and not msg.is_error_frame:
+            if module_id not in self.modules:
+                print("unknown module")
+                return
             field = self.modules[module_id].fields[field_id]
+            values = []
 
-            if field.datatype == "float":
-                value = struct.unpack("f", msg.data)[0]
-            elif field.datatype == "uint8_t":
-                value = msg.data[0]
-            elif field.datatype == "bool":
-                value = msg.data[0] == 1
-            elif field.datatype == "uint16_t":
-                value = struct.unpack("H", msg.data)[0]
-            elif field.datatype == "int16_t":
-                value = struct.unpack("h", msg.data)[0]
-            elif field.datatype == "ulong64_t":
-                value = struct.unpack("Q", msg.data)[0]
-            elif field.datatype == "string":
-                value = (struct.unpack(f"{msg.dlc}s", msg.data)[0]).decode()
-            else:
-                value = None
-        else:
-            value = None
+            remaining_data = msg.data
 
-        event = SimpleCanEvent(msg, device_id, module_id, field_id, value)
-        self.app.post_message(event)
+            datatypes = field.datatype.split(",")
+            for datatype in datatypes:
+                if datatype == "float":
+                    data = remaining_data[:4]
+                    remaining_data = remaining_data[4:]
+                    value = round(struct.unpack("f", data)[0], 4)
+                    values.append(value)
+                elif datatype == "uint8_t":
+                    data = remaining_data[:1]
+                    remaining_data = remaining_data[1:]
+                    values.append(data[0])
+                elif datatype == "bool":
+                    data = remaining_data[:1]
+                    remaining_data = remaining_data[1:]
+                    values.append(data[0] == 1)
+                elif datatype == "uint16_t":
+                    data = remaining_data[:2]
+                    remaining_data = remaining_data[2:]
+                    values.append(struct.unpack("H", data)[0])
+                elif datatype == "int16_t":
+                    data = remaining_data[:2]
+                    remaining_data = remaining_data[2:]
+                    values.append(struct.unpack("h", data)[0])
+                elif datatype == "ulong64_t":
+                    values.append(struct.unpack("Q", remaining_data)[0])
+                elif datatype == "string":
+                    values.append(
+                        (struct.unpack(f"{msg.dlc}s", remaining_data)[0]).decode()
+                    )
+                else:
+                    values.append(None)
+
+            if len(values) == 1:
+                values = values[0]
+
+            event = SimpleCanEvent(msg, device_id, module_id, field_id, values)
+            self.app.post_message(event)

@@ -31,5 +31,6 @@ class CanModuleWidget(Widget):
         if event.key == "escape":
             self.app.can_device_widget.table.focus()
         elif event.key == "enter":
-            self.app.can_field_widget.table.focus()
+            pass
+            # 
         # event.stop()

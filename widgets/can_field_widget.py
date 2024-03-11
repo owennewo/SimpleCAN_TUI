@@ -47,19 +47,23 @@ class CanFieldWidget(Widget):
             )  # this sleep is just to slow things down to see the cursor move
             event.stop()
 
+    async def delayed_push_screen(self):
+        await asyncio.sleep(0.01)
+        self.app.push_screen(
+            CanFieldEditWidget(
+                self.app.config,
+                self.app.device_id,
+                self.app.module_id,
+                self.app.field_id,
+            )
+        )
+
     @on(Key)
-    def on_key(self, event: Key) -> None:
+    async def on_key(self, event: Key) -> None:
         if event.key == "escape":
             self.app.can_module_widget.table.focus()
         elif event.key == "enter":
-            self.app.push_screen(
-                CanFieldEditWidget(
-                    self.app.config,
-                    self.app.device_id,
-                    self.app.module_id,
-                    self.app.field_id,
-                )
-            )
+            asyncio.create_task(self.delayed_push_screen())
 
     def update_fields(self, can_module):
         self.table.clear()

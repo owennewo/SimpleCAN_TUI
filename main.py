@@ -68,12 +68,14 @@ class VerticalLayoutExample(App):
     @on(DataTable.RowSelected, "#device-table")
     def device_selected(self, event):
         self.device_id = int(event.row_key.value)
+        self.app.can_module_widget.table.focus()
 
     @on(DataTable.RowSelected, "#module-table")
     def module_selected(self, event):
         self.module_id = int(event.row_key.value)
         self.can_field_widget.update_fields(self.modules[self.module_id])
         self.request_fields()
+        self.app.can_field_widget.table.focus()
 
     @on(DataTable.RowSelected, "#field-table")
     def field_selected(self, event):
@@ -88,7 +90,6 @@ class VerticalLayoutExample(App):
 
 
 app = VerticalLayoutExample()
-
 
 if __name__ == "__main__":
     app._closing

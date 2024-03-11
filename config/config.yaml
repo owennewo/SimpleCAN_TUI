@@ -130,7 +130,6 @@ modules:
         description: reduce the frequency of motion control)
         value: None
         datatype: uint16_t
-      
   0b0100:
     name: PID_CURRENT_Q
     fields: &PID_FIELDS
@@ -175,9 +174,72 @@ modules:
     name: PID_ANGLE
     fields: *PID_FIELDS
   0b1000: 
-    name: TELEMETRY
+    name: METRICS
     fields:
+      0b000:
+          name: VELOCITY_ANGLE
+          description: Monitor channel 0
+          value: None
+          datatype: float,float
+      0b001:
+          name: CURRENT_DQ
+          description: Monitor channel 1
+          value: None
+          datatype: float,float
+      0b010:
+          name: VOLTAGE_DQ
+          description: Monitor channel 1
+          value: None
+          datatype: float,float
+      0b011:
+          name: DUTYCYCLE_ABC
+          description: Monitor channel 1
+          value: None
+          datatype: half_float,half_float,half_float
   0b1001:
+    name: MONITOR
+    fields:
+      0b000:
+          name: CHANNEL_0
+          description: Monitor channel 0
+          value: None
+          datatype: uint16_t,uint16_t
+      0b001:
+          name: CHANNEL_1
+          description: Monitor channel 1
+          value: None
+          datatype: uint16_t,uint16_t
+      0b010:
+          name: CHANNEL_2
+          description: Monitor channel 2
+          value: None
+          datatype: uint16_t,uint16_t
+      0b011:
+          name: CHANNEL_3
+          description: Monitor channel 3
+          value: None
+          datatype: uint16_t,uint16_t
+      0b100:
+          name: CHANNEL_4
+          description: Monitor channel 4
+          value: None
+          datatype: uint16_t,uint16_t 
+      0b101:
+          name: CHANNEL_5
+          description: Monitor channel 5
+          value: None
+          datatype: uint16_t,uint16_t 
+      0b110:
+          name: CHANNEL_6
+          description: Monitor channel 6
+          value: None
+          datatype: uint16_t,uint16_t 
+      0b111:
+          name: CHANNEL_7
+          description: Monitor channel 7
+          value: None
+          datatype: uint16_t,uint16_t 
+  0b1010:
     name: PROGRAM
     fields:
       0b000:
@@ -200,46 +262,3 @@ modules:
           description: Writing also causes RTR send
           value: None
           datatype: bool
-  0b1000:
-    name: TELEMETRY
-    fields:
-      0b000:
-          name: CHANNEL_0
-          description: Telemetry channel 0
-          value: None
-          datatype: float
-      0b001:
-          name: CHANNEL_1
-          description: Telemetry channel 1
-          value: None
-          datatype: float
-      0b010:
-          name: CHANNEL_2
-          description: Telemetry channel 2
-          value: None
-          datatype: float
-      0b011:
-          name: CHANNEL_3
-          description: Telemetry channel 3
-          value: None
-          datatype: float
-      0b100:
-          name: CONFIG_0
-          description: Telemetry channel 0 configuration
-          value: None
-          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 
-      0b101:
-          name: CONFIG_1
-          description: Telemetry channel 1 configuration
-          value: None
-          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 
-      0b110:
-          name: CONFIG_2
-          description: Telemetry channel 2 configuration
-          value: None
-          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 
-      0b111:
-          name: CONFIG_3
-          description: Telemetry channel 3 configuration
-          value: None
-          datatype: raw # can be float or [float, float] or [1/2 float, 1/2 float, 1/2 float] 
