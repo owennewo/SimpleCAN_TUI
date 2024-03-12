@@ -1,6 +1,6 @@
 from textual.app import ComposeResult
 from textual.screen import ModalScreen
-from textual.widgets import Button, Label, Input
+from textual.widgets import Button, Label, Input, Header
 from textual.containers import Container, Horizontal
 from textual import on
 from config.config import Config
@@ -11,6 +11,7 @@ class CanFieldEditWidget(ModalScreen):
 
     def __init__(self, config: Config, device_id, module_id, field_id):
         super().__init__()
+        self.tall = True
         self.config = config
         self.device_id = device_id
         self.module_id = module_id
@@ -19,21 +20,24 @@ class CanFieldEditWidget(ModalScreen):
         self.jog_exponent = 0  # 10 ** jog_exponent is the amout we jog
 
     def compose(self) -> ComposeResult:
-        deviceName = self.config.devices[self.device_id].name
-        moduleName = self.config.modules[self.module_id].name
-        fieldName = self.field.name
+        # deviceName = self.config.devices[self.device_id].name
+        self.sub_title = self.config.modules[self.module_id].name
+        self.title = self.field.name
         datatype = self.field.datatype
         value = self.field.value
+        header = Header()
+        header.tall = True
         with Container():
-            with Horizontal():
-                yield Label("device:  ")
-                yield Label(deviceName)
-            with Horizontal():
-                yield Label("module:  ")
-                yield Label(moduleName)
-            with Horizontal():
-                yield Label("module:  ")
-                yield Label(fieldName)
+            yield header
+            # with Horizontal():
+            #     yield Label("device:  ")
+            #     yield Label(deviceName)
+            # with Horizontal():
+            #     yield Label("module:  ")
+            #     yield Label(moduleName)
+            # with Horizontal():
+            #     yield Label("module:  ")
+            #     yield Label(fieldName)
             with Horizontal():
                 yield Label("datatype:")
                 yield Label(datatype)
@@ -79,6 +83,9 @@ class CanFieldEditWidget(ModalScreen):
                     (float(value) + 10.0**self.jog_exponent),
                     f".{decimal_places}f",
                 )
+            elif "int" in self.field.datatype:
+                value = int(self.query_one("#input-value").value) + 1
+                self.query_one("#input-value").value = str(value)
         elif event.key == "down":
             if self.field.datatype == "bool":
                 self.query_one(
@@ -91,6 +98,11 @@ class CanFieldEditWidget(ModalScreen):
                     (float(value) - 10.0**self.jog_exponent),
                     f".{decimal_places}f",
                 )
+            elif "int" in self.field.datatype:
+                value = int(self.query_one("#input-value").value) - 1
+                if "uint" in self.field.datatype and value < 0:
+                    value = 0
+                self.query_one("#input-value").value = str(value)
 
         elif event.key == "left":
             self.jog_exponent = self.jog_exponent + 1

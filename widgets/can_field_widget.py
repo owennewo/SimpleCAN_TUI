@@ -38,12 +38,12 @@ class CanFieldWidget(Widget):
             coordinate = self.table.get_cell_coordinate(
                 row_key=str(event.field_id), column_key="value"
             )
-            self.table.move_cursor(
-                row=coordinate.row, column=coordinate.column, animate=False
-            )
+            # self.table.move_cursor(
+            #     row=coordinate.row, column=coordinate.column, animate=False
+            # )
             self.table.refresh_row(coordinate.row)
             await asyncio.sleep(
-                0.04
+                0.1
             )  # this sleep is just to slow things down to see the cursor move
             event.stop()
 

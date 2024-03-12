@@ -5,6 +5,7 @@ from typing import Dict
 from config.config import CanDevice
 from textual.events import Key
 from textual import on
+from widgets.quit_widget import QuitWidget
 
 
 class CanDeviceWidget(Widget):
@@ -29,7 +30,13 @@ class CanDeviceWidget(Widget):
     @on(Key)
     def on_key(self, event: Key) -> None:
         if event.key == "escape":
-            self.app.exit()
+
+            def check_quit(quit: bool) -> None:
+                if quit:
+                    self.app.exit()
+
+            self.app.push_screen(QuitWidget(), check_quit)
+
         elif event.key == "enter":
             pass
             # self.app.can_module_widget.table.focus()

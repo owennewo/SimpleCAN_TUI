@@ -1,5 +1,4 @@
 from textual.app import App, ComposeResult
-from textual.binding import Binding
 from textual.widgets import Header, DataTable
 from textual.containers import Vertical, Horizontal, Container
 from textual import on
@@ -13,15 +12,12 @@ from simplecan.event import SimpleCanEvent
 from config.config import (
     load_config_from_yaml,
 )
-from can.interface import Bus
 
 
 class VerticalLayoutExample(App):
 
     CSS_PATH = "main.css"
-    BINDINGS = [
-        Binding(key="q", action="quit", description="Quit"),
-    ]
+    ENABLE_COMMAND_PALETTE = False
 
     def __init__(self):
         super().__init__()
@@ -39,8 +35,10 @@ class VerticalLayoutExample(App):
         )
 
     def compose(self) -> ComposeResult:
+        header = Header()
+        header.tall = True
         yield Vertical(
-            Header(),
+            header,
             Horizontal(
                 Vertical(
                     Container(self.can_device_widget, id="device-container"),

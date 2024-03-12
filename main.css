@@ -1,6 +1,11 @@
 Horizontal {
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
+}
+
+Vertical {
+    width: auto;
+    height: auto;
 }
 
 #vertical-left {
@@ -8,12 +13,18 @@ Horizontal {
 }
 
 DataTable:focus-within {
-    background: blue;
+    background: $primary-lighten-1;
 }
 
 #device-container {
-    /* background: palegoldenrod; */
+    background: $primary-lighten-3;
+    height: 6;
 }
+
+#device-table {
+    height: 100%;
+}
+
 
 #module-table {
     width: 25;
@@ -22,7 +33,7 @@ DataTable:focus-within {
 
 #module-container {
     width: 25;
-    /* background: lightskyblue; */
+    background: $primary-lighten-3;
 }
 
 #module-table {
@@ -32,8 +43,9 @@ DataTable:focus-within {
 
 #field-container {
     /* background: whitesmoke; */
+    background: $primary-lighten-3;
+    margin-left: 1;
 }
-
 
 #field-table {
     height: 100%;
@@ -42,22 +54,39 @@ DataTable:focus-within {
 CanFooter {
     dock: bottom;
     height: 1;
-    background: ansi_blue;
+    background: $primary-darken-2;
 }
 
 Header {
-    background: mediumslateblue;
+    background: $primary-darken-2;
+}
+
+QuitWidget {
+    align: center middle;
+}
+
+QuitWidget>Container>Vertical>Label {
+    margin-bottom: 1;
 }
 
 CanFieldEditWidget {
     align: center middle;
 }
 
+
 CanFieldEditWidget>Container {
     width: auto;
     height: auto;
-    border: thick $background 80%;
+    border: thick $background 90%;
     background: $surface;
+}
+
+QuitWidget>Container {
+    width: auto;
+    height: auto;
+    border: thick $background 90%;
+    background: $surface;
+    padding: 1;
 }
 
 CanFieldEditWidget>Container>Horizontal>Input {
